@@ -1,35 +1,47 @@
 package se.lexicon.recipedatabase.model;
 
 
+import javax.persistence.*;
 import java.util.Objects;
 
-
+@Entity
 public class RecipeIngredient {
 
-    private String recipeIngredient;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String recipeIngredientId;
 
+    @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.REFRESH,},
+            fetch = FetchType.EAGER)
     private Ingredient ingredient;
 
     private double amount;
 
     private Measurement measurement;
 
+    @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.REFRESH,},
+            fetch = FetchType.EAGER)
     private Recipe recipe;
 
-    public RecipeIngredient(String recipeIngredient, Ingredient ingredient, double amount, Measurement measurement, Recipe recipe) {
-        this.recipeIngredient = recipeIngredient;
+    protected RecipeIngredient(){
+
+    }
+
+    public RecipeIngredient(String recipeIngredientId, Ingredient ingredient, double amount, Measurement measurement, Recipe recipe) {
+
+        this.recipeIngredientId = recipeIngredientId;
         this.ingredient = ingredient;
         this.amount = amount;
         this.measurement = measurement;
         this.recipe = recipe;
     }
 
-    public String getRecipeIngredient() {
-        return recipeIngredient;
+    public String getRecipeIngredientId() {
+        return recipeIngredientId;
     }
 
-    public void setRecipeIngredient(String recipeIngredient) {
-        this.recipeIngredient = recipeIngredient;
+    public void setRecipeIngredientId(String recipeIngredientId) {
+        this.recipeIngredientId = recipeIngredientId;
     }
 
     public Ingredient getIngredient() {
@@ -69,18 +81,18 @@ public class RecipeIngredient {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecipeIngredient that = (RecipeIngredient) o;
-        return Double.compare(that.getAmount(), getAmount()) == 0 && getRecipeIngredient().equals(that.getRecipeIngredient()) && getIngredient().equals(that.getIngredient()) && getMeasurement() == that.getMeasurement() && getRecipe().equals(that.getRecipe());
+        return Double.compare(that.getAmount(), getAmount()) == 0 && getRecipeIngredientId().equals(that.getRecipeIngredientId()) && getIngredient().equals(that.getIngredient()) && getMeasurement() == that.getMeasurement() && getRecipe().equals(that.getRecipe());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRecipeIngredient(), getIngredient(), getAmount(), getMeasurement(), getRecipe());
+        return Objects.hash(getRecipeIngredientId(), getIngredient(), getAmount(), getMeasurement(), getRecipe());
     }
 
     @Override
     public String toString() {
         return "RecipeIngredient{" +
-                "recipeIngredient='" + recipeIngredient + '\'' +
+                "recipeIngredientId='" + recipeIngredientId + '\'' +
                 ", ingredient=" + ingredient +
                 ", amount=" + amount +
                 ", measurement=" + measurement +

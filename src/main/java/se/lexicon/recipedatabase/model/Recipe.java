@@ -1,18 +1,27 @@
 package se.lexicon.recipedatabase.model;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Recipe {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int recipeId;
 
     private String recipeName;
 
+    @OneToMany (cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,},
+    fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "RecipeCategory")
     private List<RecipeIngredient>recipeIngredients;
 
+    @OneToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private  RecipeInstruction instruction;
 
+    @OneToMany (cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,},
+            fetch = FetchType.LAZY)
     private List<RecipeCategory>categories;
 
     public Recipe(int recipeId, String recipeName, List<RecipeIngredient> recipeIngredients, RecipeInstruction instruction, List<RecipeCategory> categories) {
@@ -21,6 +30,10 @@ public class Recipe {
         this.recipeIngredients = recipeIngredients;
         this.instruction = instruction;
         this.categories = categories;
+    }
+
+    public Recipe() {
+
     }
 
     public int getRecipeId() {

@@ -1,20 +1,32 @@
 package se.lexicon.recipedatabase.model;
 
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class RecipeCategory {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int categoryId;
 
     private String category;
 
-    private List<Recipe>recipes;
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST,},
+            fetch = FetchType.LAZY, mappedBy = "food")
+    private List<Recipe> recipes;
 
     public RecipeCategory(int categoryId, String category, List<Recipe> recipes) {
         this.categoryId = categoryId;
         this.category = category;
         this.recipes = recipes;
+
+    }
+
+    public RecipeCategory() {
+
     }
 
     public int getCategoryId() {

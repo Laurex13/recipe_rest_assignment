@@ -1,16 +1,27 @@
 package se.lexicon.recipedatabase.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Objects;
 
+@Entity
 public class RecipeInstruction {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String instructionId;
 
-    private String instruction;
+    private String instructions;
 
     public RecipeInstruction(String instructionId, String instruction) {
         this.instructionId = instructionId;
-        this.instruction = instruction;
+        this.instructions = instructions;
+    }
+
+    public RecipeInstruction() {
+
     }
 
     public String getInstructionId() {
@@ -21,12 +32,12 @@ public class RecipeInstruction {
         this.instructionId = instructionId;
     }
 
-    public String getInstruction() {
-        return instruction;
+    public String getInstructions() {
+        return instructions;
     }
 
-    public void setInstruction(String instruction) {
-        this.instruction = instruction;
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
     }
 
     @Override
@@ -34,19 +45,19 @@ public class RecipeInstruction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RecipeInstruction that = (RecipeInstruction) o;
-        return getInstructionId().equals(that.getInstructionId()) && getInstruction().equals(that.getInstruction());
+        return getInstructionId().equals(that.getInstructionId()) && getInstructions().equals(that.getInstructions());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getInstructionId(), getInstruction());
+        return Objects.hash(getInstructionId(), getInstructions());
     }
 
     @Override
     public String toString() {
         return "RecipeInstruction{" +
                 "instructionId='" + instructionId + '\'' +
-                ", instruction='" + instruction + '\'' +
+                ", instructions='" + instructions + '\'' +
                 '}';
     }
 }

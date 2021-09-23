@@ -1,20 +1,27 @@
 package se.lexicon.recipedatabase.model;
 
+
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
-
+@Entity
 public class Ingredient {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ingredientId;
 
     private String ingredientName;
 
+    @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.REFRESH, },
+    fetch = FetchType.EAGER)
     private RecipeIngredient recipeIngredient;
 
-    public Ingredient(int ingredientId, String ingredientName, RecipeIngredient recipeIngredient) {
+    protected Ingredient(){
+
+    }
+
+    public Ingredient( int ingredientId, String ingredientName, RecipeIngredient recipeIngredient) {
         this.ingredientId = ingredientId;
         this.ingredientName = ingredientName;
         this.recipeIngredient = recipeIngredient;
