@@ -13,18 +13,15 @@ public class Ingredient {
 
     private String ingredientName;
 
-    @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.REFRESH, },
-    fetch = FetchType.EAGER)
-    private RecipeIngredient recipeIngredient;
 
-    protected Ingredient(){
+    public Ingredient(){
 
     }
 
-    public Ingredient( int ingredientId, String ingredientName, RecipeIngredient recipeIngredient) {
+    public Ingredient( int ingredientId, String ingredientName) {
         this.ingredientId = ingredientId;
         this.ingredientName = ingredientName;
-        this.recipeIngredient = recipeIngredient;
+
     }
 
     public int getIngredientId() {
@@ -43,25 +40,17 @@ public class Ingredient {
         this.ingredientName = ingredientName;
     }
 
-    public RecipeIngredient getRecipeIngredient() {
-        return recipeIngredient;
-    }
-
-    public void setRecipeIngredient(RecipeIngredient recipeIngredient) {
-        this.recipeIngredient = recipeIngredient;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Ingredient)) return false;
         Ingredient that = (Ingredient) o;
-        return getIngredientId() == that.getIngredientId() && getIngredientName().equals(that.getIngredientName()) && getRecipeIngredient().equals(that.getRecipeIngredient());
+        return ingredientId == that.ingredientId && Objects.equals(ingredientName, that.ingredientName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIngredientId(), getIngredientName(), getRecipeIngredient());
+        return Objects.hash(ingredientId, ingredientName);
     }
 
     @Override
@@ -69,7 +58,6 @@ public class Ingredient {
         return "Ingredient{" +
                 "ingredientId=" + ingredientId +
                 ", ingredientName='" + ingredientName + '\'' +
-                ", recipeIngredient=" + recipeIngredient +
                 '}';
     }
 }

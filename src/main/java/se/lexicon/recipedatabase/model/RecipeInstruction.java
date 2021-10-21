@@ -1,5 +1,7 @@
 package se.lexicon.recipedatabase.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,7 +12,8 @@ import java.util.Objects;
 public class RecipeInstruction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String instructionId;
 
     private String instructions;
@@ -43,14 +46,14 @@ public class RecipeInstruction {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof RecipeInstruction)) return false;
         RecipeInstruction that = (RecipeInstruction) o;
-        return getInstructionId().equals(that.getInstructionId()) && getInstructions().equals(that.getInstructions());
+        return Objects.equals(instructionId, that.instructionId) && Objects.equals(instructions, that.instructions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getInstructionId(), getInstructions());
+        return Objects.hash(instructionId, instructions);
     }
 
     @Override

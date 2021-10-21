@@ -1,6 +1,8 @@
 package se.lexicon.recipedatabase.model;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -8,22 +10,25 @@ import java.util.Objects;
 public class RecipeIngredient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name= "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String recipeIngredientId;
 
-    @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.REFRESH,},
+    @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH},
             fetch = FetchType.EAGER)
+    @JoinColumn(name ="ingredient_id",table = "ingredient")
     private Ingredient ingredient;
 
     private double amount;
 
     private Measurement measurement;
 
-    @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.REFRESH,},
+    @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH,},
             fetch = FetchType.EAGER)
+    @JoinColumn(name = "recipe_id", table = "recipe")
     private Recipe recipe;
 
-    protected RecipeIngredient(){
+    public RecipeIngredient(){
 
     }
 
@@ -35,6 +40,7 @@ public class RecipeIngredient {
         this.measurement = measurement;
         this.recipe = recipe;
     }
+
 
     public String getRecipeIngredientId() {
         return recipeIngredientId;
@@ -79,14 +85,14 @@ public class RecipeIngredient {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof RecipeIngredient)) return false;
         RecipeIngredient that = (RecipeIngredient) o;
-        return Double.compare(that.getAmount(), getAmount()) == 0 && getRecipeIngredientId().equals(that.getRecipeIngredientId()) && getIngredient().equals(that.getIngredient()) && getMeasurement() == that.getMeasurement() && getRecipe().equals(that.getRecipe());
+        return Double.compare(that.amount, amount) == 0 && Objects.equals(recipeIngredientId, that.recipeIngredientId) && Objects.equals(ingredient, that.ingredient) && measurement == that.measurement && Objects.equals(recipe, that.recipe);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRecipeIngredientId(), getIngredient(), getAmount(), getMeasurement(), getRecipe());
+        return Objects.hash(recipeIngredientId, ingredient, amount, measurement, recipe);
     }
 
     @Override

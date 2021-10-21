@@ -1,7 +1,7 @@
 package se.lexicon.recipedatabase.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -10,12 +10,16 @@ public class RecipeCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
     private int categoryId;
 
     private String category;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST,},
-            fetch = FetchType.LAZY, mappedBy = "food")
+    @ManyToMany (cascade = {CascadeType.DETACH,  CascadeType.REFRESH, CascadeType.PERSIST,CascadeType.MERGE,},
+            fetch = FetchType.LAZY)
+    @JoinTable(name = "recipe_categories"
+            , joinColumns = @JoinColumn(name = "recipe_id")
+            , inverseJoinColumns = @JoinColumn(name = "reccipe_category_id"))
     private List<Recipe> recipes;
 
     public RecipeCategory(int categoryId, String category, List<Recipe> recipes) {
@@ -56,14 +60,14 @@ public class RecipeCategory {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof RecipeCategory)) return false;
         RecipeCategory that = (RecipeCategory) o;
-        return getCategoryId() == that.getCategoryId() && getCategory().equals(that.getCategory()) && getRecipes().equals(that.getRecipes());
+        return categoryId == that.categoryId && Objects.equals(category, that.category) && Objects.equals(recipes, that.recipes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCategoryId(), getCategory(), getRecipes());
+        return Objects.hash(categoryId, category, recipes);
     }
 
     @Override

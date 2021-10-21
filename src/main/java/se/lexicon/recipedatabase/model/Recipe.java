@@ -1,5 +1,7 @@
 package se.lexicon.recipedatabase.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -8,32 +10,33 @@ import java.util.Objects;
 public class Recipe {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")
     private int recipeId;
 
     private String recipeName;
 
-    @OneToMany (cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,},
-    fetch = FetchType.LAZY,orphanRemoval = true,mappedBy = "RecipeCategory")
+    @OneToMany (cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,CascadeType.PERSIST},
+    fetch = FetchType.LAZY,mappedBy = "recipe")
     private List<RecipeIngredient>recipeIngredients;
 
     @OneToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private  RecipeInstruction instruction;
+    @JoinColumn(name = "recipe_instruction_id", table = "recipe_instruction")
+    private  RecipeInstruction recipeInstruction;
 
-    @OneToMany (cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,},
-            fetch = FetchType.LAZY)
-    private List<RecipeCategory>categories;
+    @ManyToMany (cascade = {CascadeType.DETACH, CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH,},
+            fetch = FetchType.LAZY,mappedBy = "recipes")
+    private List<RecipeCategory>recipeCategories;
 
-    public Recipe(int recipeId, String recipeName, List<RecipeIngredient> recipeIngredients, RecipeInstruction instruction, List<RecipeCategory> categories) {
+    public Recipe(int recipeId, String recipeName, List<RecipeIngredient> recipeIngredients, RecipeInstruction recipeInstruction, List<RecipeCategory> recipeCategories) {
         this.recipeId = recipeId;
         this.recipeName = recipeName;
         this.recipeIngredients = recipeIngredients;
-        this.instruction = instruction;
-        this.categories = categories;
+        this.recipeInstruction = recipeInstruction;
+        this.recipeCategories = recipeCategories;
     }
 
     public Recipe() {
-
     }
 
     public int getRecipeId() {
@@ -60,33 +63,33 @@ public class Recipe {
         this.recipeIngredients = recipeIngredients;
     }
 
-    public RecipeInstruction getInstruction() {
-        return instruction;
+    public RecipeInstruction getRecipeInstruction() {
+        return recipeInstruction;
     }
 
-    public void setInstruction(RecipeInstruction instruction) {
-        this.instruction = instruction;
+    public void setRecipeInstruction(RecipeInstruction recipeInstruction) {
+        this.recipeInstruction = recipeInstruction;
     }
 
-    public List<RecipeCategory> getCategories() {
-        return categories;
+    public List<RecipeCategory> getRecipeCategories() {
+        return recipeCategories;
     }
 
-    public void setCategories(List<RecipeCategory> categories) {
-        this.categories = categories;
+    public void setRecipeCategories(List<RecipeCategory> recipeCategories) {
+        this.recipeCategories = recipeCategories;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Recipe)) return false;
         Recipe recipe = (Recipe) o;
-        return getRecipeId() == recipe.getRecipeId() && getRecipeName().equals(recipe.getRecipeName()) && getRecipeIngredients().equals(recipe.getRecipeIngredients()) && getInstruction().equals(recipe.getInstruction()) && getCategories().equals(recipe.getCategories());
+        return recipeId == recipe.recipeId && recipeName.equals(recipe.recipeName) && recipeIngredients.equals(recipe.recipeIngredients) && recipeInstruction.equals(recipe.recipeInstruction) && recipeCategories.equals(recipe.recipeCategories);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRecipeId(), getRecipeName(), getRecipeIngredients(), getInstruction(), getCategories());
+        return Objects.hash(recipeId, recipeName, recipeIngredients, recipeInstruction, recipeCategories);
     }
 
     @Override
@@ -95,8 +98,9 @@ public class Recipe {
                 "recipeId=" + recipeId +
                 ", recipeName='" + recipeName + '\'' +
                 ", recipeIngredients=" + recipeIngredients +
-                ", instruction=" + instruction +
-                ", categories=" + categories +
+                ", recipeInstruction=" + recipeInstruction +
+                ", recipeCategories=" + recipeCategories +
                 '}';
     }
 }
+
