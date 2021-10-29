@@ -8,11 +8,11 @@ import java.util.Collection;
 
 public interface RecipeInstructionDAO {
 
-    RecipeInstruction findById(int id);
+    RecipeInstruction findById(Integer recipeInstructionId);
     Collection<RecipeInstruction> findAll();
     RecipeInstruction create(RecipeInstruction recipeInstruction);
     RecipeInstruction update(RecipeInstruction recipeInstruction);
-    void deleteBYId (int id);
+    void deleteBYId (Integer recipeInstructionId);
 
 
 

@@ -6,11 +6,9 @@ import java.util.Collection;
 
 public interface RecipeCategoryDAO {
 
-    RecipeCategory findByNameContain (String name);
-
-    Collection<RecipeCategory>findAllByIngredientName(String name);
-
-    Collection<RecipeCategory>findAllByRecipeName(String name);
-
-    RecipeCategory findBYRecipe(String recipe);
+    RecipeCategory findById(Integer recipeCategoryId);
+    Collection<RecipeCategory> findAll();
+    RecipeCategory create(RecipeCategory recipeCategory);
+    RecipeCategory update(RecipeCategory recipeCategory);
+    void delete(Integer recipeCategoryId);
 }

@@ -1,7 +1,6 @@
 package se.lexicon.recipedatabase.data;
 
 import org.springframework.stereotype.Repository;
-import se.lexicon.recipedatabase.model.RecipeIngredient;
 import se.lexicon.recipedatabase.model.RecipeInstruction;
 
 import javax.persistence.EntityManager;
@@ -18,14 +17,14 @@ public class RecipeInstructionDAORepository implements RecipeInstructionDAO{
 
     @Override
     @Transactional
-    public RecipeInstruction findById(int id) {
-        return entityManager.find(RecipeInstruction.class,id);
+    public RecipeInstruction findById(Integer recipeInstructionId) {
+        return entityManager.find(RecipeInstruction.class, recipeInstructionId);
     }
 
     @Override
     @Transactional
     public Collection<RecipeInstruction> findAll() {
-        Query query = entityManager.createQuery("SELECT b FROM RecipeInstruction b",RecipeInstruction.class);
+        Query query = entityManager.createQuery("SELECT recipeInstruction FROM RecipeInstruction recipeInstruction",RecipeInstruction.class);
         return query.getResultList();
     }
 
@@ -44,8 +43,14 @@ public class RecipeInstructionDAORepository implements RecipeInstructionDAO{
 
     @Override
     @Transactional
-    public void deleteBYId(int id) {
-        entityManager.remove(findById(id));
+    public void deleteBYId(Integer recipeInstructionId) {
+        RecipeInstruction deleted = findById(recipeInstructionId);
+        if (deleted != null){
+            entityManager.remove(deleted);
+            System.out.println(recipeInstructionId + "is deleted");
+        }else {
+            throw new IllegalArgumentException(recipeInstructionId + "not found");
+        }
 
     }
 }

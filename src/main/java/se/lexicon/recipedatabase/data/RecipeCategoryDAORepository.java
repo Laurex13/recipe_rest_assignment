@@ -11,34 +11,42 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Repository
-public class RecipeCategoryDAORepository implements RecipeCategoryDAO{
+public class RecipeCategoryDAORepository implements RecipeCategoryDAO {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
-    @Transactional
-    public RecipeCategory findByNameContain(String name) {
-        return entityManager.find(RecipeCategory.class,findByNameContain(name));
+    public RecipeCategory findById(Integer recipeCategoryId) {
+        return entityManager.find(RecipeCategory.class,recipeCategoryId);
     }
 
     @Override
-    @Transactional
-    public Collection<RecipeCategory> findAllByIngredientName(String name) {
-        Query query = entityManager.createQuery("SELECT c FROM RecipeCategory c", Ingredient.class);
-        return query.getResultList();
+    public Collection<RecipeCategory> findAll() {
+        return entityManager.createQuery("SELECT recipeCategory FROM RecipeCategory recipeCategory",RecipeCategory.class).getResultList();
     }
 
     @Override
-    @Transactional
-    public Collection<RecipeCategory> findAllByRecipeName(String name) {
-        Query query = entityManager.createQuery("SELECT c FROM RecipeCategory c",RecipeCategory.class);
-        return query.getResultList();
+    public RecipeCategory create(RecipeCategory recipeCategory) {
+         entityManager.persist(recipeCategory);
+         return recipeCategory;
     }
 
     @Override
-    @Transactional
-    public RecipeCategory findBYRecipe(String recipe) {
-        return entityManager.find(RecipeCategory.class,recipe);
+    public RecipeCategory update(RecipeCategory recipeCategory) {
+        return entityManager.merge(recipeCategory);
+    }
+
+    @Override
+    public void delete(Integer recipeCategoryId) {
+        RecipeCategory deleted = findById(recipeCategoryId);
+        if (deleted != null){
+            entityManager.remove(deleted);
+            System.out.println(recipeCategoryId + "is deleted");
+        }else {
+            throw new IllegalArgumentException(recipeCategoryId + "not found");
+        }
+
+
     }
 }

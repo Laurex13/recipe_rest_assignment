@@ -7,12 +7,9 @@ import java.util.Collection;
 
 public interface RecipeDAO {
 
-    Recipe findByNameContain (String name);
-
-    Collection<Recipe>findAllByIngredientName(String name);
-
-    Collection<Recipe>findAllByRecipeCategory(String name);
-
+    Recipe findById(Integer recipeId);
     Collection<Recipe> findAll();
-
+    Recipe create(Recipe recipe);
+    Recipe update(Recipe recipe);
+    void delete(Integer recipeId);
 }

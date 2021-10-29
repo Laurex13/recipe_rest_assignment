@@ -7,10 +7,10 @@ import java.util.Collection;
 
 public interface RecipeIngredientDAO  {
 
-    RecipeIngredient findById(int id);
+    RecipeIngredient findById(Integer recipeIngredientId);
     Collection<RecipeIngredient> findAll();
     RecipeIngredient create(RecipeIngredient recipeIngredient);
     RecipeIngredient update(RecipeIngredient recipeIngredient);
-    void delete(int id);
+    void delete(Integer recipeIngredientId);
 
 }

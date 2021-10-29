@@ -6,5 +6,9 @@ import java.util.Collection;
 
 public interface IngredientDAO {
 
-    Ingredient findBYIngredientName(String ingredientName);
+    Ingredient findById(Integer ingredientId);
+    Collection<Ingredient> findAll();
+    Ingredient create(Ingredient ingredient);
+    Ingredient update(Ingredient ingredient);
+    void delete(Integer ingredientId);
 }

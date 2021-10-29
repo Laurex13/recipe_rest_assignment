@@ -16,7 +16,7 @@ public class RecipeIngredient {
 
     @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH},
             fetch = FetchType.EAGER)
-    @JoinColumn(name ="ingredient_id",table = "ingredient")
+    @JoinColumn(name ="ingredient_id")
     private Ingredient ingredient;
 
     private double amount;
@@ -25,7 +25,7 @@ public class RecipeIngredient {
 
     @ManyToOne (cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH,},
             fetch = FetchType.EAGER)
-    @JoinColumn(name = "recipe_id", table = "recipe")
+    @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
     public RecipeIngredient(){

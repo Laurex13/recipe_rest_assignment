@@ -1,6 +1,7 @@
 package se.lexicon.recipedatabase.data;
 
 import org.springframework.stereotype.Repository;
+import se.lexicon.recipedatabase.model.Recipe;
 import se.lexicon.recipedatabase.model.RecipeIngredient;
 
 import javax.persistence.EntityManager;
@@ -14,19 +15,19 @@ import java.util.Collection;
 public class RecipeIngredientDAORepository implements RecipeIngredientDAO{
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
 
     @Override
     @Transactional
-    public RecipeIngredient findById(int id) {
-        return entityManager.find(RecipeIngredient.class, id);
+    public RecipeIngredient findById(Integer recipeIngredientId) {
+        return entityManager.find(RecipeIngredient.class, recipeIngredientId);
     }
 
     @Override
     @Transactional
     public Collection<RecipeIngredient> findAll() {
-        Query query = entityManager.createQuery("SELECT b FROM RecipeIngredient b",RecipeIngredient.class);
+        Query query = entityManager.createQuery("SELECT recipeIngredient FROM RecipeIngredient recipeIngredient",RecipeIngredient.class);
         return query.getResultList();
     }
 
@@ -40,10 +41,19 @@ public class RecipeIngredientDAORepository implements RecipeIngredientDAO{
     @Override
     @Transactional
     public RecipeIngredient update(RecipeIngredient recipeIngredient) {
+
         return entityManager.merge(recipeIngredient);
     }
+
     @Override
-    public void delete (int id){
-        entityManager.remove(findById(id));
+    public void delete(Integer recipeIngredientId) {
+        RecipeIngredient deleted = findById(recipeIngredientId);
+        if (deleted != null){
+            entityManager.remove(deleted);
+            System.out.println(recipeIngredientId + "is deleted");
+        }else {
+            throw new IllegalArgumentException(recipeIngredientId + "not found");
+        }
+
     }
 }

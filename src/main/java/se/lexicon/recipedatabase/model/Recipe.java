@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Recipe {
 
     @Id
-    @GeneratedValue(generator = "UUID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")
     private int recipeId;
 
@@ -21,7 +21,7 @@ public class Recipe {
     private List<RecipeIngredient>recipeIngredients;
 
     @OneToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "recipe_instruction_id", table = "recipe_instruction")
+    @JoinColumn(name = "recipe_instruction_id")
     private  RecipeInstruction recipeInstruction;
 
     @ManyToMany (cascade = {CascadeType.DETACH, CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH,},

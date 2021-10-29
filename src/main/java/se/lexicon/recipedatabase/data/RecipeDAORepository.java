@@ -12,35 +12,51 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Repository
-public class RecipeDAORepository implements RecipeDAO{
+public class RecipeDAORepository implements RecipeDAO {
 
-    @PersistenceContext
-    EntityManager entityManager;
+     @PersistenceContext
+   private EntityManager entityManager;
 
-    @Override
-    @Transactional
-    public Recipe findByNameContain(String name) {
-        return entityManager.find(Recipe.class,findByNameContain(name));
-    }
+
 
     @Override
     @Transactional
-    public Collection<Recipe> findAllByIngredientName(String name) {
-        Query query = entityManager.createQuery("SELECT a FROM Recipe a", Ingredient.class);
-        return query.getResultList();
-    }
-
-    @Override
-    @Transactional
-    public Collection<Recipe> findAllByRecipeCategory(String name) {
-        Query query = entityManager.createQuery("SELECT a FROM Recipe a", RecipeCategory.class);
-        return query.getResultList();
+    public Recipe findById(Integer recipeId) {
+        return entityManager.find(Recipe.class,recipeId);
     }
 
     @Override
     @Transactional
     public Collection<Recipe> findAll() {
-        Query query = entityManager.createQuery("SELECT a FROM Recipe a",Recipe.class);
-        return query.getResultList();
+        return entityManager.createQuery("SELECT recipe FROM Recipe recipe",Recipe.class).getResultList();
     }
+
+    @Override
+    @Transactional
+    public Recipe create(Recipe recipe) {
+        entityManager.persist(recipe);
+        return recipe;
+    }
+
+    @Override
+    @Transactional
+    public Recipe update(Recipe recipe) {
+        return entityManager.merge(recipe);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Integer recipeId) {
+        Recipe deleted = findById(recipeId);
+        if (deleted != null){
+            entityManager.remove(deleted);
+            System.out.println(recipeId + "is deleted");
+        }else {
+            throw new IllegalArgumentException(recipeId + "not found");
+        }
+
+
+    }
+
+
 }
