@@ -13,7 +13,7 @@ import java.util.Collection;
 public class RecipeInstructionDAORepository implements RecipeInstructionDAO{
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     @Transactional
